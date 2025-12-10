@@ -19,7 +19,7 @@ TEST_EXIT_CODE=$?
 
 echo "📊 Exit code from Maven: $TEST_EXIT_CODE"
 
-if [ $TEST_EXIT_CODE -ne 0]; then 
+if [ "$TEST_EXIT_CODE" -ne 0 ]; then 
      echo "❌ Tests failed. Commit CANCELLED."
      exit 1	
 fi
