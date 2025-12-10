@@ -47,7 +47,7 @@ class UserRepositoryTest {
 
         assertTrue(userEntityOptional.isPresent());
         assertEquals("Sultan", userEntityOptional.get().getUsername());
-        assertEquals("Sultan@gamail.com", userEntityOptional.get().getEmail());
+        assertEquals("Sultan@gmail.com", userEntityOptional.get().getEmail());
     }
 
 
