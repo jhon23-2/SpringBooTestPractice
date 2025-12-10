@@ -14,11 +14,14 @@ echo ""
 
 
 echo "🧪 Running Maven tests..."
-mvn -q test
+mvn test
+TEST_EXIT_CODE=$?
 
-if [$? -ne 0]; then 
+echo "📊 Exit code from Maven: $TEST_EXIT_CODE"
+
+if [ $TEST_EXIT_CODE -ne 0]; then 
      echo "❌ Tests failed. Commit CANCELLED."
-     exit 1
+     exit 1	
 fi
 
 echo "✅ All tests passed. Committing changes..."
