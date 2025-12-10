@@ -17,8 +17,8 @@ echo "Adding files to the stage area ..."
 
 git add .
 
-echo " Commit message to save changes "
+echo "Commit message to save changes "
 git commit -m "$MESSAGE"
 
-echo "✔ Commit done: $MESSAGE"
+echo "Commit done: $MESSAGE"
 echo ""
