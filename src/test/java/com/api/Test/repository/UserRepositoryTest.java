@@ -1,6 +1,7 @@
 package com.api.Test.repository;
 
 import com.api.Test.entity.UserEntity;
+import org.h2.engine.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ class UserRepositoryTest {
     }
 
     @Test
-    void findUserByUsername(){
+    void findUserByUsernameTest(){
 
         // given
         UserEntity user = UserEntity.builder()
@@ -52,7 +53,7 @@ class UserRepositoryTest {
 
 
     @Test
-    void userByUsernameNotFound(){
+    void userByUsernameNotFoundTest(){
         // when
         Optional<UserEntity> userEntityOptional  = this.userRepository.findByUsername("Sultan");
 
@@ -61,7 +62,7 @@ class UserRepositoryTest {
     }
 
     @Test
-    void saveAllUsers() {
+    void saveAllUsersTest() {
 
         // given
         var userOne = UserEntity.builder().username("Jhonnattan").email("Jhona@gmail.com").password("sasa").build();
@@ -77,5 +78,32 @@ class UserRepositoryTest {
         //then
         assertThat(userEntities).isNotNull();
         assertThat(userEntities.size()).isEqualTo(2);
+    }
+
+    @Test
+    void updateUserTest(){
+        // given
+        UserEntity user = UserEntity.builder()
+                .username("Jhonnatan")
+                .email("jhona@gmail.com")
+                .password("121")
+                .build();
+
+        UserEntity userSaved =  this.userRepository.save(user);
+
+        // when
+
+        UserEntity userEntityFound = this.userRepository.findById(userSaved.getId()).get();
+        userEntityFound.setUsername("Leiner");
+        userEntityFound.setEmail("leiner@gmail.com");
+
+        UserEntity userUpdated = this.userRepository.save(userEntityFound);
+
+        // then
+
+        assertThat(userUpdated).isNotNull();
+        assertEquals("Leiner", userUpdated.getUsername());
+        assertEquals("leiner@gmail.com", userUpdated.getEmail());
+
     }
 }
