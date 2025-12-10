@@ -1,7 +1,6 @@
 package com.api.Test.repository;
 
 import com.api.Test.entity.UserEntity;
-import org.h2.engine.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +47,7 @@ class UserRepositoryTest {
 
         assertTrue(userEntityOptional.isPresent());
         assertEquals("Sultan", userEntityOptional.get().getUsername());
-        assertEquals("Sultan@gmail.com", userEntityOptional.get().getEmail());
+        assertEquals("Sultan@gamail.com", userEntityOptional.get().getEmail());
     }
 
 

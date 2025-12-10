@@ -13,12 +13,20 @@ echo "👉 Watching for changes... (Ctrl+C to stop)"
 echo ""
 
 
-echo "Adding files to the stage area ..."
+echo "🧪 Running Maven tests..."
+mvn -q test
+
+if [$? -ne 0]; then 
+     echo "❌ Tests failed. Commit CANCELLED."
+     exit 1
+fi
+
+echo "✅ All tests passed. Committing changes..."
+
+
 
 git add .
-
-echo "Commit message to save changes "
 git commit -m "$MESSAGE"
 
-echo "Commit done: $MESSAGE"
+echo "✔ Commit completed successfully with message: $MESSAGE"
 echo ""
