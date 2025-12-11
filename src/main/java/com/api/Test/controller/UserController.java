@@ -24,7 +24,7 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserDto>> findAll(){
+    public ResponseEntity<List<UserDto>> findAllUser(){
         return ResponseEntity.ok()
                 .body(this.userService.findAll());
     }
@@ -33,6 +33,18 @@ public class UserController {
     public ResponseEntity<UserDto> findByUsername(@RequestParam String username){
         return ResponseEntity.status(HttpStatus.OK)
                 .body(this.userService.findUserByUsername(username).get());
+    }
+
+    @PatchMapping("/update")
+    public ResponseEntity<?> updateUser(@RequestParam(name = "id") Long id, @RequestBody UserDto userDto){
+
+        if(id == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("You must provide id");
+        }
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(this.userService.updateUserDto(id,userDto));
     }
 
 }

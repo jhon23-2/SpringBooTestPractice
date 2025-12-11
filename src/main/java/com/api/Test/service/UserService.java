@@ -56,4 +56,34 @@ public class UserService {
                 .build()).or(() -> Optional.of(new UserDto()));
 
     }
+
+    public UserDto updateUserDto(Long id, UserDto userDto) {
+
+        // find the user by id
+        Optional<UserEntity> userEntityOptional = this.userRepository.findById(id);
+
+        if(userEntityOptional.isEmpty()) {
+            return new UserDto();
+        }
+
+        // get the user and update fields
+
+        UserEntity userFound = userEntityOptional.get();
+        userFound.setUsername(userDto.getUsername());
+        userFound.setEmail(userDto.getEmail());
+        userFound.setPassword(userDto.getPassword());
+        userFound.setUpdateAt(LocalDateTime.now());
+
+        UserEntity userSaved = this.userRepository.save(userFound);
+
+
+        // return userDto to the client -> DTO Pattern design
+        return UserDto.builder()
+                .username(userSaved.getUsername())
+                .email(userSaved.getEmail())
+                .password(userSaved.getEmail())
+                .createAt(userSaved.getCreateAt().toString())
+                .updatedAt(userSaved.getUpdateAt().toString())
+                .build();
+    }
 }

@@ -13,6 +13,7 @@ import static org.mockito.Mockito.*;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -27,7 +28,7 @@ class UserServiceTest {
     private UserService userService;
 
     @Test
-    void findUserByUsernameMockTest() {
+    void findUserByUsernameServiceMockTest() {
         assertThat(userService).isNotNull();
 
         //Given
@@ -51,7 +52,7 @@ class UserServiceTest {
     }
 
     @Test
-    void createUserMockTest() {
+    void createUserServiceMockTest() {
         //Given
         var userEntity = UserEntity.builder()
                 .id(1L)
@@ -82,4 +83,60 @@ class UserServiceTest {
         assertThat(savedUser.getEmail()).isEqualTo("Jhonatan@gmail.com");
     }
 
+
+    @Test
+    void updateUserServiceMockTest(){
+        // Given
+
+
+        //MockUserEntity when userRepository.findById() mock is called -> (Mock User that exist to database)
+        UserEntity mockUser = new UserEntity();
+        mockUser.setId(1L);
+        mockUser.setUsername("Sultan");
+        mockUser.setEmail("test@example.com");
+        mockUser.setPassword("1234");
+        mockUser.setCreateAt(LocalDateTime.now());
+        mockUser.setUpdateAt(LocalDateTime.now());
+
+        // MockUseDto to update the user -> (Mock userDto updated Coming from the body)
+        UserDto userUpdatedDto = UserDto.builder()
+                .username("Jhonattan")
+                        .email("jhoalmanza@gmail.com")
+                                .password("1221").build();
+
+
+        //Mock user Updated -> (Mock userEntity updated)
+
+        UserEntity userUpdated = UserEntity.builder()
+                .username(userUpdatedDto.getUsername())
+                        .email(userUpdatedDto.getEmail())
+                                .password(userUpdatedDto.getPassword())
+                                        .createAt(LocalDateTime.now())
+                                                .updateAt(LocalDateTime.now())
+                                                        .build();
+
+
+        //When
+
+        when(this.userRepository.findById(Mockito.any(Long.class))).thenReturn(Optional.of(mockUser));
+        when(this.userRepository.save(Mockito.any(UserEntity.class))).thenReturn(userUpdated);
+
+        Optional<UserEntity> userOptionalEntity =  this.userRepository.findById(1L);
+        UserEntity userFound = userOptionalEntity.get();
+
+        userFound.setUsername(userUpdatedDto.getUsername());
+        userFound.setEmail(userUpdatedDto.getEmail());
+        userFound.setPassword(userUpdatedDto.getPassword());
+        userFound.setUpdateAt(LocalDateTime.now());
+
+        UserEntity userSaved = this.userRepository.save(userFound);
+
+        //Then
+
+        assertThat(userOptionalEntity.isPresent()).isEqualTo(true);
+        assertThat(userSaved.getUsername()).isEqualTo("Jhonattan");
+        assertThat(userSaved.getEmail()).endsWith(".com");
+
+
+    }
 }
