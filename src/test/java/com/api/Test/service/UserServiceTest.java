@@ -13,7 +13,6 @@ import static org.mockito.Mockito.*;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -138,5 +137,32 @@ class UserServiceTest {
         assertThat(userSaved.getEmail()).endsWith(".com");
 
 
+    }
+
+    @Test
+    void deleteUserById_whenUserExists_callsDelete() {
+        // given
+        UserEntity mockUser = new UserEntity();
+        mockUser.setId(1L);
+        when(this.userRepository.findById(1L)).thenReturn(Optional.of(mockUser));
+
+        // when
+        this.userService.deleteUserById(1L);
+
+        // then
+        verify(this.userRepository).deleteById(1L);
+    }
+
+    @Test
+    void deleteUserById_whenUserNotFound_throwsRuntimeException() {
+        // given
+        when(this.userRepository.findById(99L)).thenReturn(Optional.empty());
+
+        // when / then
+        assertThatThrownBy(() -> this.userService.deleteUserById(99L))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessageContaining("User not found with id: 99");
+
+        verify(this.userRepository, never()).deleteById(anyLong());
     }
 }

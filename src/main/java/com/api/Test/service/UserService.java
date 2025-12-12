@@ -86,4 +86,10 @@ public class UserService {
                 .updatedAt(userSaved.getUpdateAt().toString())
                 .build();
     }
+
+
+    public void deleteUserById(Long id){
+        if (this.userRepository.findById(id).isEmpty()) throw new RuntimeException("User not found with id: " + id);
+        this.userRepository.deleteById(id);
+    }
 }

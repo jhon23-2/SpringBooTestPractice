@@ -105,4 +105,27 @@ class UserRepositoryTest {
         assertEquals("leiner@gmail.com", userUpdated.getEmail());
 
     }
+
+    @Test
+    void deleteUserByIdTest(){
+        // Given
+
+        UserEntity userEntity = UserEntity.builder()
+                .username("Sultan")
+                .email("sultan@gmail.com")
+                .password("1212")
+                .build();
+
+        UserEntity userSaved = this.userRepository.save(userEntity);
+
+        // When
+
+        this.userRepository.deleteById(userSaved.getId());
+
+        Optional<UserEntity> userEntityOptional = this.userRepository.findById(userSaved.getId());
+
+        // Then
+
+        assertTrue(userEntityOptional.isEmpty());
+    }
 }
